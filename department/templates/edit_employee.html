@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Employee</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="mb-4">Edit Employee</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>First Name</label>
+        <input type="text" name="first_name" class="form-control mb-2" value="{{ employee.first_name }}" required>
+
+        <label>Last Name</label>
+        <input type="text" name="last_name" class="form-control mb-2" value="{{ employee.last_name }}" required>
+
+        <label>Email</label>
+        <input type="email" name="email" class="form-control mb-2" value="{{ employee.email }}" required>
+
+        <label>Mobile Number</label>
+        <input type="text" name="mobile" class="form-control mb-2" value="{{ employee.mobile }}" required>
+
+        <label>Username</label>
+        <input type="text" name="username" class="form-control mb-2" value="{{ employee.username }}" required>
+
+        <label>Set New Password (leave blank to keep current)</label>
+        <input type="password" name="password" class="form-control mb-2">
+
+        <label>Select Role</label>
+        <select name="role" class="form-control mb-2" required>
+            <option value="">--Select--</option>
+            {% for role in roles %}
+                <option value="{{ role.id }}" {% if role.id == employee.role.id %}selected{% endif %}>{{ role.name }}</option>
+            {% endfor %}
+        </select>
+
+        <label>Select Department</label>
+        <select name="department" class="form-control mb-2" required>
+            <option value="">--Select--</option>
+            {% for dept in departments %}
+                <option value="{{ dept.id }}" {% if dept.id == employee.department.id %}selected{% endif %}>{{ dept.dept_name }}</option>
+            {% endfor %}
+        </select>
+
+        <label>Allocate Reporting Manager</label>
+        <select name="reporting_manager" class="form-control mb-2">
+            <option value="">--Select--</option>
+            {% for manager in managers %}
+                <option value="{{ manager.id }}" {% if employee.reporting_manager and manager.id == employee.reporting_manager.id %}selected{% endif %}>
+                    {{ manager.first_name }} {{ manager.last_name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <label>Date of Joining</label>
+        <input type="date" name="date_of_joining" class="form-control mb-4" value="{{ employee.date_of_joining|date:'Y-m-d' }}" required>
+
+        <button type="submit" class="btn btn-success">Update Employee</button>
+        <a href="{% url 'employee_dashboard' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+</body>
+</html>
